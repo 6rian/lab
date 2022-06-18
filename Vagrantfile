@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   
   config.vm.hostname = "blackbird"
   config.ssh.forward_agent = true
-  config.disksize.size = "50GB"
+  # config.disksize.size = "50GB"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -64,7 +64,13 @@ Vagrant.configure("2") do |config|
     sudo apt upgrade -y
 
     sudo apt-get install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
-    # sudo shutdown -r now  
+    
+    # Install Xfce desktop environment
+    sudo apt-get install -y xfce4
+    # Allow any user to start the GUI
+    sudo sed -i 's/allowed_users=.*$/allowed_users=anybody/' /etc/X11/Xwrapper.config
+    
+    sudo shutdown -r now  
   SHELL
 
 end
