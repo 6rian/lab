@@ -58,18 +58,23 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    # Disable installation prompts
+    export DEBIAN_FRONTEND=noninteractive
+
     # Add the multiverse repo in order to install virtualbox-guest-utils
     sudo apt add apt-add-repository multiverse
 
-    sudo apt update -y
-    sudo apt upgrade -y
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
 
     sudo apt-get install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
     
     # Install Xfce desktop environment
-    sudo apt-get install -y xfce4
+    sudo apt-get install -y -q xfce4 xfce4-whiskermenu-plugin
     # Allow any user to start the GUI
     sudo sed -i 's/allowed_users=.*$/allowed_users=anybody/' /etc/X11/Xwrapper.config
+    # Set lightdm as the default display manager
+    sudo echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
     
     sudo shutdown -r now  
   SHELL
